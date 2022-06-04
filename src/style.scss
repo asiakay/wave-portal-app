@@ -1,0 +1,116 @@
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Righteous&display=swap');
+
+$body-color: #ffffff;
+
+
+$font-family-sans-serif: "Lato",
+sans-serif;
+
+body {
+    background: rgb(170,255,85);
+    background: linear-gradient(126deg, rgba(170,255,85,1) 0%, rgba(255,85,170,1) 24%, rgba(0,0,85,1) 96%, rgba(0,85,255,1) 99%, rgba(255,170,0,1) 99%, rgba(255,170,0,1) 100%);
+    background-position: center 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
+}
+
+.mainContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 64px;
+  color: #ffffff;
+}
+
+.dataContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 600px;
+}
+
+.header {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 600;
+  font-family: 'Righteous';
+}
+
+.waveButton {
+  cursor: pointer;
+  margin-top: 16px;
+  padding: 8px;
+  border-radius: 5px;
+    background-color: #ff00ff;
+    border: 2px solid white;
+    padding:20px 50px;
+    font-weight: bold;
+    font-size:30px;
+    position:relative;
+    color:lime;
+    border-radius: 15px;
+
+  }
+
+  .waveButton:after{
+    content:'';
+    position:absolute;
+    background-color:lime;
+    top:8px;
+    left:8px;
+    right:-8px;
+    bottom:-8px;
+    z-index:-1;
+    border-radius: 15px;
+
+  }
+
+  /* hover */
+
+  .waveButton:hover {
+    background-color: black;
+    border: 2px solid lime;
+    padding:20px 50px;
+    font-weight: bold;
+    font-size:30px;
+    position:relative;
+    color:#ffffff;
+    border-radius: 15px;
+
+  }
+
+  .waveButton:hover:after {
+    content:'';
+    position:absolute;
+    background-color:#000000;
+    border: 2px solid #ff00ff;
+    top:8px;
+    left:8px;
+    right:-8px;
+    bottom:-8px;
+    z-index:-1;
+    border-radius: 15px;
+
+  }
+
+
+.name {
+  background-color: #000;
+	color: #fff;
+	display:inline;
+	padding: .5em;
+    text-shadow: 2px 2px 2px #FF1B65, 5px 0px 0px #B467FF; 
+    font-family: 'Righteous', cursive;
+    border-radius: 5px;
+}
+
+.bio {
+    line-height: 30px;
+}
