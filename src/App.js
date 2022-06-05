@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "./style.scss";
 import { ethers } from "ethers";
+import "./style.scss";
 import abi from "./utils/WavePortal.json";
 
 const App = () => {
@@ -10,10 +10,11 @@ const App = () => {
   /*  */
 
   // store `totalWaves` in local state 
-/*   const [totalWaves, setTotalWaves] = useState(""); 
- */
-  /* variable to hold contract address after deployment */
+  // const [totalWaves, setTotalWaves] = useState(""); 
+ 
 
+
+  /* variable to hold contract address after deployment */
   const contractAddress = "0x919384Fa9DB888809eca17F6A1DD8a8296e03CeD";
   
   /* variable referencing abi content */
@@ -31,6 +32,7 @@ const App = () => {
     } else {
       console.log("We have the ethereum object", ethereum);
     }
+
     /* checking if we have authorization to access the user's wallet */
     const accounts = await ethereum.request({ method: "eth_accounts" });
 
@@ -52,7 +54,7 @@ const connectWallet = async () => {
     const { ethereum } = window;
 
     if (!ethereum){
-      alert("You need to get MetaMask to access this feature");
+      alert("Get MetaMask to access this feature");
       return;
     }
 
@@ -72,7 +74,7 @@ const wave = async () => {
     const { ethereum } = window;
 
     if (ethereum){
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
       const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
 
@@ -121,9 +123,6 @@ const wave = async () => {
         <button className="waveButton" onClick={connectWallet}>
           Connect Wallet
         </button>
-      )}
-      {currentAccount && (
-        <div className="showWaves">{}</div>
       )}
     </div>
   </div>
