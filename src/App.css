@@ -101,8 +101,21 @@ body {
     text-shadow: 2px 2px 2px #FF1B65, 5px 0px 0px #B467FF; 
     font-family: 'Righteous', cursive;
     border-radius: 5px;
+    text-align: center;
+    border-radius: 45px;
+
 }
 
 .bio {
     line-height: 30px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 45px;
+    border: 3px solid black;
+}
+
+#li {
+
+    color: Black;
+    text-align: center;
 }

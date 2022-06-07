@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ListGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 import "./App.css";
 import abi from "./utils/WavePortal.json";
@@ -101,14 +102,21 @@ return (
   <div className="mainContainer">
     <div className="dataContainer">
       <div className="header">
-        <h1>👋 Hey there!</h1>
+        <h1><span className="name">👋 Hey there!</span></h1>
       </div> {/* .header */}
 
         <div className="bio">
-        <h2>I am <span className="name">Asia Lakay.</span></h2>
-        My passion is music because of its power to help people create connections and boost their moods.
-        My other passion is tech because of its potential to help people improve express themselves and improve their quality of life.
-        </div>{/* .bio */}
+        <h2><span className="name">I am Asia Lakay.</span></h2>
+        <span className="name">My interests include:  </span>
+        <ListGroup variant="flush" id="li">
+        <ListGroup.Item id="li">Spirituality</ListGroup.Item>
+        <ListGroup.Item id="li">Finance</ListGroup.Item>
+        <ListGroup.Item id="li">Music</ListGroup.Item>
+        <ListGroup.Item id="li">Cats</ListGroup.Item>  
+        <ListGroup.Item id="li">Tech</ListGroup.Item>
+        </ListGroup>
+       
+         </div>{/* .bio */}
 
         <button 
         className="waveButton" 
