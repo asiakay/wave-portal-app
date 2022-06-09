@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Righteous&display=swap');
 
 body {
-    background: rgb(170,255,85);
-    background: linear-gradient(126deg, rgba(170,255,85,1) 0%, rgba(255,85,170,1) 24%, rgba(0,0,85,1) 96%, rgba(0,85,255,1) 99%, rgba(255,170,0,1) 99%, rgba(255,170,0,1) 100%);
+    background: #aaff55;
+    background: linear-gradient(126deg, rgba(170,255,85,1) 0%, #ff55aa 24%, rgba(0,0,85,1) 96%, rgba(0,85,255,1) 99%, rgba(255,170,0,1) 99%, rgba(255,170,0,1) 100%);
     background-position: center 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -13,6 +13,62 @@ body {
     -ms-background-size: cover;
 }
 
+#topnav {
+  background-color: #000;
+  padding: 24px;
+  color: #fff;
+}
+
+#brand {
+background: #AAFF55;
+background: linear-gradient(to right, #AAFF55 0%, #FF55AA 48%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+font-family: 'Righteous';
+}
+
+#navtext {
+  color: white;
+}
+
+[href="https://asialakay.net"] {
+  color: #aaff55; 
+} 
+
+h1 {
+  background: #AAFF55;
+background: linear-gradient(to right, #AAFF55 0%, #FF55AA 48%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+font-family: 'Righteous';
+text-shadow: #000;
+-webkit-text-stroke: 1px black;
+
+}
+
+h2 {
+  background: #AAFF55;
+  background: linear-gradient(to right, #AAFF55 0%, #FF55AA 48%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: 'Righteous';
+  text-shadow: #000;
+  -webkit-text-stroke: 1px black;
+}
+
+h3 {
+  text-align: center;
+  margin-top: 24px;
+  background: #AAFF55;
+  background: linear-gradient(to right, #AAFF55 0%, #FF55AA 48%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: 'Righteous';
+  text-shadow: #000;
+  -webkit-text-stroke: 1px black;
+
+
+}
 .mainContainer {
   display: flex;
   justify-content: center;
@@ -48,6 +104,8 @@ button {
     position:relative;
     color:lime;
     border-radius: 15px;
+    font-family: 'Righteous';
+
 
   }
 
@@ -98,11 +156,14 @@ button {
 	color: #fff;
 	display:inline;
 	padding: .5em;
-    text-shadow: 2px 2px 2px #FF1B65, 5px 0px 0px #B467FF; 
+    text-shadow: 1px 1px 1px #FF1B65, 2.5px 0px 0px #B467FF; 
     font-family: 'Righteous', cursive;
     border-radius: 5px;
     text-align: center;
     border-radius: 45px;
+    border-right: 3px solid #B467FF;
+    
+
 }
 
 .name, label {
@@ -134,7 +195,7 @@ button {
   margin-top: 16px;
 }
 
-.text-write {
+#text-write {
   line-height: 30px;
   text-align: center;
   background-color: #fff;
@@ -155,6 +216,69 @@ label {
     color: Black;
     text-align: center;
 }
+
+/* LINK BUTTONS */
+
+#href-buttons
+{
+    cursor: pointer;
+    margin-top: 16px;
+    padding: 8px;
+    border-radius: 5px;
+      background-color: #ff00ff;
+      border: 2px solid white;
+      padding:20px 50px;
+      font-weight: bold;
+      font-size:30px;
+      position:relative;
+      color:lime;
+      border-radius: 15px;
+      font-family: 'Righteous';
+  
+  
+    }
+  
+    #href-buttons{
+      content:'';
+      position:absolute;
+      background-color:lime;
+      top:8px;
+      left:8px;
+      right:-8px;
+      bottom:-8px;
+      z-index:-1;
+      border-radius: 15px;
+  
+    }
+  
+    /* hover */
+  
+   #href-buttons:hover {
+      background-color: black;
+      border: 2px solid lime;
+      padding:20px 50px;
+      font-weight: bold;
+      font-size:30px;
+      position:relative;
+      color:#ffffff;
+      border-radius: 15px;
+  
+    }
+  
+   #href-buttons:hover:after {
+      content:'';
+      position:absolute;
+      background-color:#000000;
+      border: 2px solid #ff00ff;
+      top:8px;
+      left:8px;
+      right:-8px;
+      bottom:-8px;
+      z-index:-1;
+      border-radius: 15px;
+  
+    }
+  
 
 .load-9 {
   color: lightgray;

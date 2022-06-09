@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ListGroup } from "react-bootstrap";
+import { ButtonGroup, /* ListGroup */ } from "react-bootstrap";
 import { ethers } from "ethers";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 import abi from "./utils/WavePortal.json";
+import Navigation from "./Navigation";
+
 
 const App = () => {
   const contractABI = abi.abi;
@@ -23,7 +26,8 @@ const App = () => {
       const { ethereum } = window;
 
       if (!ethereum) {
-        console.log("Make sure you have metamask!");
+        console.log("Make sure you have MetaMask!");
+        alert("Make sure you have MetaMask")
         return;
       } else {
         console.log("We have the ethereum object", ethereum);
@@ -42,14 +46,6 @@ const App = () => {
       console.log(error);
     }
   };
-
-  /**
-  * Implement your renderInput method here
-  */
-
-
-
-
 
   /**
   * Implement your connectWallet method here
@@ -175,29 +171,50 @@ const App = () => {
           wavePortalContract.off("NewWave", onNewWave);
       }
   };
-}, []);
+}, [contractABI]);
 
 return (
+  <>
+<div>
+<Navigation/>
+</div>
   <div className="mainContainer">
     <div className="dataContainer">
       <div className="header">
-        <h1><span className="name">👋 Hey there!</span></h1>
+        <h1><span className="name">👋 Hey there! I am Asia Lakay.</span></h1>
       </div> {/* .header */}
 
         <div className="bio">
-        <h2><span className="name">I am Asia Lakay.</span></h2>
-        <span className="name">My interests include</span>
-        <ListGroup variant="flush" id="li">
-        <ListGroup.Item id="li">Wellness</ListGroup.Item>
-        <ListGroup.Item id="li">Finance</ListGroup.Item>
-        <ListGroup.Item id="li">Music</ListGroup.Item>
-        <ListGroup.Item id="li">Cats</ListGroup.Item>  
-        <ListGroup.Item id="li">Tech</ListGroup.Item>
-        </ListGroup>
+        <h2><span className="">Curated Links</span></h2>
+        
+        
+        
+       {/*  <div class="btn-group-vertical">
+        <a href="https://padlet.com/asialakay/fvc9yi3h4932" type="button" id="href-buttons">Wellness</a>
+        </div> */}
+
+
+
+        <ButtonGroup vertical aria-label="curated links" /* variant="flush" id="li" */>
+        <a href="https://padlet.com/asialakay/fvc9yi3h4932" role="button" class="href-button" >🌱 The Environment</a>
+        <a href="https://padlet.com/asialakay/fvc9yi3h4932" role="button" class="href-button" >🌎 Sustainability</a>
+        <a href="https://padlet.com/asialakay/ut5ofk1704pjygy7" role="button" class="href-button" >🖊️ Creative Tools</a>
+
+
+        <a href="https://padlet.com/asialakay/fvc9yi3h4932" role="button" class="href-button" >🧘🏽‍♀️ Wellness</a>
+
+        <a href="https://padlet.com/asialakay/loz0p1k78g4zv592" role="button" class="href-button" >🌐 Web3.0</a>
+        </ButtonGroup>
+
+{/*         <ListGroup.Item>💰 Finance</ListGroup.Item>
+        <ListGroup.Item>🎼 Music</ListGroup.Item>
+        <ListGroup.Item>😻 Cats</ListGroup.Item>  
+        <ListGroup.Item>👩🏽‍💻 Tech</ListGroup.Item>
+        </ListGroup> */}
        
          </div>{/* .bio */}
          
-
+<p></p>
 
        
 
@@ -205,11 +222,11 @@ return (
 
            
            {currentAccount && (
-                       <div className="text-write">
+                       <div >
+               <h3><span className="name">Want to share? Send your fav links! 🙌 </span></h3>
 
              <form onSubmit={handleSubmit}>
-               <label className="name">Enter Your Message Below</label>
-               <div>
+               <div id="text-write">
                  <textarea 
                  value={message}
                  onChange={(e) => setMsgText(e.target.value)}
@@ -218,10 +235,11 @@ return (
                  placeholder="(optional)"
                  />
                </div>
-               <button 
-             className="waveButton" 
-             onClick={wave} >Send & Wave</button>
+               
              </form>
+             <button 
+             className="waveButton" 
+             onClick={wave}>Send & Wave</button>
              </div>
              
            )}
@@ -260,7 +278,8 @@ return (
       );
         })}
     </div> {/* /* .dataContainer * */}
-  </div> /* .mainContainer */
+  </div> {/* .mainContainer */}
+  </>
   );
 };
 
