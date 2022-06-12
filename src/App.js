@@ -197,7 +197,7 @@ return (
                  <textarea 
                  value={messageText}
                  onChange={(e) => setMessageText(e.target.value)}
-                 rows={10}
+                 rows={3}
                  cols={60}
                  placeholder="(optional)"
                  />
