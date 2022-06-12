@@ -1,177 +1,161 @@
-import React, { useEffect, useState } from "react";
-import { ButtonGroup, /* ListGroup */ } from "react-bootstrap";
 import { ethers } from "ethers";
+import React, { useEffect, useState } from "react";
+import abi from "./utils/WavePortal.json";
+import { ButtonGroup, /* ListGroup */ } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
-import abi from "./utils/WavePortal.json";
 import Navigation from "./Navigation";
 
-
 const App = () => {
-  const contractABI = abi.abi;
-  const [allWaves, setAllWaves] = useState([]);
   const [currentAccount, setCurrentAccount] = useState("");
-  const [message, setMsgText] = useState("");
+  // variable that grabs and sets/updates the state of the current state of the account that is adding the wave being sent to the blockchain
+  const [messageText, setMessageText] = useState("");
+  // variable that grabs and sets/updates the state of the current message that gets sent to the smart contract
+  const [allWaves, setAllWaves] = useState([]); 
+  // variable to grabs and sets/updates the state of the # waves that have been sent to the smart contract on the blockchain 
+  
   const [loading, setLoading] = useState(false);
+  // variable that grabs and sets/updates the state of the loading animation that displays on the page letting the user know minting is in progress
+  
   const handleSubmit = (e) => {
+    // variable that triggers:  
     e.preventDefault();
-    wave(message);
-    setMsgText("");
-
+    wave(messageText);
+    // (cont) 1. the wave() function holding the message as a parameter
+    setMessageText("");
+    // (cont) 2. the setMessageText("") function setting the empty string to hold 
   }
-  const contractAddress = "0x484124904Cc0d4712f58A60C804382b895a584A4";
 
+
+
+  const contractAddress = "0xf8324458982499351404D695471634bA44E272de";
+  // variable that holds the address of the wallet address
+
+  const contractABI = abi.abi; 
+  // imports application binary data from my-wave-portal>artifacts>contracts>WavePortal.json 
+  // (cont from above) into wave-portal-app>src>utils>WavePortal.json
+  
+  
+  
+  
+  
   const checkIfWalletIsConnected = async () => {
-    try {
-      const { ethereum } = window;
+  // variable that holds the async function that triggers the process checking
+  // (cont) checking if the wallet is connected  
+
+ 
+  const { ethereum } = window;
+  /* making sure we have access to window.ethereum */
 
       if (!ethereum) {
-        console.log("Make sure you have MetaMask!");
-        alert("Make sure you have MetaMask")
+        console.log("MetaMask is not connected")
+        // then output to the JavaScript console the above message in "".  
         return;
       } else {
-        console.log("We have the ethereum object", ethereum);
+        console.log("We have the ethereum object", ethereum)
+     /* Checking if we're authorized to access the user's wallet */
       }
+      ethereum.request({ method: 'eth_accounts' })
+      .then(accounts => {
+       console.log(accounts)
+     if(accounts.length !==0){
+       const account = accounts[0];
+       console.log("Found an authorized account:", account)
+       setCurrentAccount(account);
+     } else {
+       console.log("No authorized account found")
+     }
+    })
+  }
 
-      const accounts = await ethereum.request({ method: "eth_accounts" });
+  const connectWallet = async () => {
+  // implementing connectWallet method
 
-      if (accounts.length !== 0) {
-        const account = accounts[0];
-        console.log("Found an authorized account:", account);
-        setCurrentAccount(account)
-      } else {
-        console.log("No authorized account found")
+  const ethereum = window.ethereum;
+
+    if (!ethereum){
+      alert("Get MetaMask!");
+      return;
+    } else {
+      const accounts = await ethereum.request({ method: "eth_requestAccounts" })
+    /* eth_requestAccounts: asking Metamask to give access to the user's wallet */
+    setCurrentAccount(accounts[0])
+    console.log("Connected", accounts[0])
       }
-    } catch (error) {
-      console.log(error);
     }
-  };
 
-  /**
-  * Implement your connectWallet method here
-  */
-   const connectWallet = async () => {
-    try {
-      const { ethereum } = window; 
-
-      if (!ethereum){
-        alert("Please Get MetaMask");
-        return;
-      }
-
-      const accounts = await ethereum.request({ method: "eth_requestAccounts"});
-
-      console.log("Connected", accounts[0]);
-      setCurrentAccount(accounts[0]);
-    } catch (error){
-      console.log(error)
-    }
-  }; /* .`connectWallet()` */
-
-  const wave = async (message) => {
-    console.log("let the waving begin.")
-    try {
-      const { ethereum } = window;
+  const wave = async () => {
+    const { ethereum } = window;
 
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
+        /* providers talks to Etheruem nodes */
         const signer = provider.getSigner();
+        /* signer sends transactions and signs messages https://docs.ethers.io/v5/api/signer/#signers?utm_source=buildspace.so&utm_medium=buildspace_project */
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-        
+
         let count = await wavePortalContract.getTotalWaves();
+        /* calling the getTotalWaves() function */
         console.log("Retrieved total wave count...", count.toNumber());
-                /*
-                 * Execute the actual wave from your smart contract
-                 */
-        const waveTxn = await wavePortalContract.wave(message);
-        console.log("Mining...", waveTxn.hash);
 
-        setLoading(true)
+    // executing wave transaction below
+    const waveTxn = await wavePortalContract.wave(messageText);
+    console.log("Writing wave to the blockchain", waveTxn.hash);
 
-        await waveTxn.wait();
-        console.log("Mined --", waveTxn.hash);
-        
-        setLoading(false)
-        
-        count = await wavePortalContract.getTotalWaves();
-        console.log("Retreived total wave count...", count.toNumber());
+    setLoading(true)
+    /* calls the setLoading variable that shows the mining process is 
+    happening   */
 
-        setMsgText("")
-        getAllWaves()
+    await waveTxn.wait();
+    console.log("Mined --", waveTxn.hash);
+
+    setLoading(false)
+        /* stops the animation that shows the transaction is being mined because the 
+        process has been completed */
+
+    count = await wavePortalContract.getTotalWaves();
+    console.log("Updated wave count...", count.toNumber());
+
+    setMessageText("")
+    getAllWaves()
       } else {
-        console.log("Ethereum object doesn't exist!");
-        alert("You need to connect a wallet to use this feature.");
-
+        console.log("Ethereum object doesn't exist");
       }
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-
     }
-  };
 
-  const getAllWaves = async () => {
-    const { ethereum } = window;
-
-    try {
-      if (ethereum){
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-        const waves = await wavePortalContract.getAllWaves();
-
-        const wavesCleaned = waves.map((wave) => {
-          return {
-            address: wave.waver,
-            timestamp: new Date(wave.timestamp * 1000),
-            message: wave.message,
-          };
+    // method to get all waves from the contract 
+    const getAllWaves = async () => {
+      
+        const { ethereum }  = window;
+        if (ethereum){
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+          
+    // calling getAllWaves method from smart contract
+    const waves = await wavePortalContract.getAllWaves();
+  
+    // collecting address, timestamp and message for the UI
+    let wavesCleaned = [];
+    waves.forEach(wave => {
+      wavesCleaned.push({
+          address: wave.waver,
+          timestamp: new Date(wave.timestamp * 1000),
+          message: wave.message,
         });
+      });
 
-        setAllWaves(wavesCleaned);
-      } else {
-        console.log("Ethereum object doesn't exist")
-      }
-    } catch (error){
-      console.log(error);
-    }
-  };
+    // storing data in React state 
+    setAllWaves(wavesCleaned);
+  } else {
+    console.log("Ethereum object does not exist");
+  }
+}
 
   useEffect(() => {
+        // runs function when page loads
     checkIfWalletIsConnected();
   }, []);
-
-  useEffect(() => {
-    let wavePortalContract;
-
-
-
-    const onNewWave = (from, timestamp, message) => {
-      console.log("NewWave", from, timestamp, message);
-      setAllWaves((prevState) => [
-        ...prevState,
-        {
-          address: from,
-          timestamp: new Date(timestamp * 1000),
-          message: message,
-        },
-      ]);
-    };
-
-    if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-
-      wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-      wavePortalContract.on("NewWave", onNewWave);
-  }
-
-  return () => {
-      if (wavePortalContract) {
-          wavePortalContract.off("NewWave", onNewWave);
-      }
-  };
-}, [contractABI]);
 
 return (
   <>
@@ -187,40 +171,23 @@ return (
         <div className="bio">
         <h2><span className="">Curated Links</span></h2>
         
-        
-        
-       {/*  <div class="btn-group-vertical">
-        <a href="https://padlet.com/asialakay/fvc9yi3h4932" type="button" id="href-buttons">Wellness</a>
-        </div> */}
-
-
-
-        <ButtonGroup vertical aria-label="curated links" /* variant="flush" id="li" */>
-        <a href="https://padlet.com/asialakay/fvc9yi3h4932" role="button" class="href-button" >🌱 The Environment</a>
-        <a href="https://padlet.com/asialakay/fvc9yi3h4932" role="button" class="href-button" >🌎 Sustainability</a>
-        <a href="https://padlet.com/asialakay/ut5ofk1704pjygy7" role="button" class="href-button" >🖊️ Creative Tools</a>
-
-
-        <a href="https://padlet.com/asialakay/fvc9yi3h4932" role="button" class="href-button" >🧘🏽‍♀️ Wellness</a>
-
-        <a href="https://padlet.com/asialakay/loz0p1k78g4zv592" role="button" class="href-button" >🌐 Web3.0</a>
+       <div id="curated-links"> 
+        <ButtonGroup bsPrefix="" vertical aria-label="curated links" /* variant="flush" id="li" */>
+        <a href="https://padlet.com/asialakay/fvc9yi3h4932" role="button" className="href-button" >🌱 The Environment</a>
+        <a href="https://padlet.com/asialakay/fvc9yi3h4932" role="button" className="href-button" >🌎 Sustainability</a>
+        <a href="https://padlet.com/asialakay/ut5ofk1704pjygy7" role="button" className="href-button" >🖊️ Creative Tools</a>
+        <a href="https://padlet.com/asialakay/fvc9yi3h4932" role="button" className="href-button" >🧘🏽‍♀️ Wellness</a>
+        <a href="https://padlet.com/asialakay/loz0p1k78g4zv592" role="button" className="href-button" >🌐 Web3.0</a>
         </ButtonGroup>
-
-{/*         <ListGroup.Item>💰 Finance</ListGroup.Item>
-        <ListGroup.Item>🎼 Music</ListGroup.Item>
-        <ListGroup.Item>😻 Cats</ListGroup.Item>  
-        <ListGroup.Item>👩🏽‍💻 Tech</ListGroup.Item>
-        </ListGroup> */}
-       
+      </div>{/* .curated-links */}
          </div>{/* .bio */}
          
 <p></p>
 
-       
+            
 
-          {/* If there is a currentAccount, then render the `div className="text-write" below */}
-
-           
+          {/* If there is a currentAccount, then render the div below */}
+ 
            {currentAccount && (
                        <div >
                <h3><span className="name">Want to share? Send your fav links! 🙌 </span></h3>
@@ -228,28 +195,25 @@ return (
              <form onSubmit={handleSubmit}>
                <div id="text-write">
                  <textarea 
-                 value={message}
-                 onChange={(e) => setMsgText(e.target.value)}
+                 value={messageText}
+                 onChange={(e) => setMessageText(e.target.value)}
                  rows={10}
                  cols={60}
                  placeholder="(optional)"
                  />
                </div>
-               
              </form>
+             <div className="waveButton">
              <button 
              className="waveButton" 
              onClick={wave}>Send & Wave</button>
+             </div>
              </div>
              
            )}
         
 
-     {/*    <button 
-        className="waveButton" 
-        onClick={wave}>
-          Click Here to Send a Wave
-        </button> */}
+
 
         {/* If there is no currentAccount, then render the {connectWallet} button below */}
         {!currentAccount && (
@@ -266,7 +230,7 @@ return (
             </div>
             <p>loading</p>
             </div>
-        )}
+        )} 
 
         {allWaves.map((wave, index) => {
           return (
@@ -274,8 +238,8 @@ return (
               <div><label>Address:</label> {wave.address}</div>
               <div><label>Time:</label> {wave.timestamp.toString()}</div>
               <div><label>Message:</label> {wave.message}</div>
-              </div>
-      );
+              </div>)
+      
         })}
     </div> {/* /* .dataContainer * */}
   </div> {/* .mainContainer */}
