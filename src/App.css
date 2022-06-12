@@ -91,6 +91,12 @@ h3 {
   font-family: 'Righteous';
 }
 
+.waveButton {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 button {
   cursor: pointer;
   margin-top: 16px;
