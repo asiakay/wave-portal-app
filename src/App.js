@@ -28,8 +28,8 @@ const App = () => {
 
 
 
-  const contractAddress = "0xf8324458982499351404D695471634bA44E272de";
-  // variable that holds the address of the wallet address
+  const contractAddress = "0xC470a0c4FF5E1DFFC54df4fC75088CF25B86f28F";
+  // variable that holds the smart contract address
 
   const contractABI = abi.abi; 
   // imports application binary data from my-wave-portal>artifacts>contracts>WavePortal.json 
