@@ -28,16 +28,12 @@ const App = () => {
 
 
 
-  const contractAddress = "0xC470a0c4FF5E1DFFC54df4fC75088CF25B86f28F";
+  const contractAddress = "0x22D98E6B76CB082f67f1eC75Cc62e680c6b499Dc";
   // variable that holds the smart contract address
 
   const contractABI = abi.abi; 
   // imports application binary data from my-wave-portal>artifacts>contracts>WavePortal.json 
   // (cont from above) into wave-portal-app>src>utils>WavePortal.json
-  
-  
-  
-  
   
   const checkIfWalletIsConnected = async () => {
   // variable that holds the async function that triggers the process checking
