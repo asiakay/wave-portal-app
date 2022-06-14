@@ -7,12 +7,13 @@ import "./App.css";
 import Navigation from "./Navigation";
 
 const App = () => {
+  /* state property that stores all waves to block */
+  const [allWaves, setAllWaves] = useState([]); 
+
   const [currentAccount, setCurrentAccount] = useState("");
-  // variable that grabs and sets/updates the state of the current state of the account that is adding the wave being sent to the blockchain
+  // variable that grabs and sets/updates the state of account that is adding the wave being sent to the blockchain
   const [messageText, setMessageText] = useState("");
   // variable that grabs and sets/updates the state of the current message that gets sent to the smart contract
-  const [allWaves, setAllWaves] = useState([]); 
-  // variable to grabs and sets/updates the state of the # waves that have been sent to the smart contract on the blockchain 
   
   const [loading, setLoading] = useState(false);
   // variable that grabs and sets/updates the state of the loading animation that displays on the page letting the user know minting is in progress
@@ -28,7 +29,7 @@ const App = () => {
 
 
 
-  const contractAddress = "0x22D98E6B76CB082f67f1eC75Cc62e680c6b499Dc";
+  const contractAddress = "0x0C5b7CBC3491A83379E99b3243f8d907573e371B";
   // variable that holds the smart contract address
 
   const contractABI = abi.abi; 
@@ -91,6 +92,9 @@ const App = () => {
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
 
         let count = await wavePortalContract.getTotalWaves();
+
+        await wavePortalContract.wave("hello", { gasLimit: 30000 });
+        
         /* calling the getTotalWaves() function */
         console.log("Retrieved total wave count...", count.toNumber());
 
@@ -114,6 +118,7 @@ const App = () => {
 
     setMessageText("")
     getAllWaves()
+    
       } else {
         console.log("Ethereum object doesn't exist");
       }
