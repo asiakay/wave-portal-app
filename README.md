@@ -1,4 +1,4 @@
-[Smart Contract Code Repository](https://github.com/asiakay/my-wave-portal)
+[Click Here To View Smart Contract Code](https://github.com/asiakay/my-wave-portal)
 
 
 
