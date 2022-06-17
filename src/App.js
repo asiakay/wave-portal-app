@@ -19,12 +19,12 @@ const App = () => {
   // variable that grabs and sets/updates the state of the loading animation that displays on the page letting the user know minting is in progress
   
   const handleSubmit = (e) => {
-    // variable that triggers:  
+    // function that triggers:  
     e.preventDefault();
     wave(messageText);
     // (cont) 1. the wave() function holding the message as a parameter
     setMessageText("");
-    // (cont) 2. the setMessageText("") function setting the empty string to hold 
+    // (cont) 2. the setMessageText("") react hook changing setMessageText to messageText 
   }
 
 
