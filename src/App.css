@@ -306,7 +306,8 @@ label {
   width: 25px;
   height: 25px;
   border-radius: 100%;
-  background-color: #ffc83d;
+background-color: #aaff55;
+background: radial-gradient(circle, #aaff55 0%, rgba(255,85,170,1) 24%, rgba(0,0,85,1) 96%, rgba(0,85,255,1) 99%, rgba(255,170,0,1) 99%, rgba(255,170,0,1) 100%);
 }
 
 .bubble-2 {

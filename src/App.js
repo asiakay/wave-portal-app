@@ -29,7 +29,7 @@ const App = () => {
 
 
 
-  const contractAddress = "0x16061e5Eda9307b271C490E00E63bE043189d8B5";
+  const contractAddress = "0xb1d4dE15ccb9c7D92c6EC5aF820C541ef805634b";
   // variable that holds the smart contract address
 
   const contractABI = abi.abi; 
@@ -81,6 +81,8 @@ const App = () => {
       }
     }
 
+
+
   const wave = async () => {
     const { ethereum } = window;
 
@@ -93,7 +95,8 @@ const App = () => {
 
         let count = await wavePortalContract.getTotalWaves();
 
-        await wavePortalContract.wave("WavePortal", { gasLimit: 30000 });
+        // await wavePortalContract.wave("WavePortal", { gasLimit: 30000 }); no need to set gasLimit - it's done in Metamask automatically and in this line it's too low causing transaction to fail
+        await wavePortalContract.wave("WavePortal");
         
         /* calling the getTotalWaves() function */
         console.log("Retrieved total wave count...", count.toNumber());
@@ -127,31 +130,32 @@ const App = () => {
     // method to get all waves from the contract 
     const getAllWaves = async () => {
       
-        const { ethereum }  = window;
-        if (ethereum){
-          const provider = new ethers.providers.Web3Provider(ethereum);
-          const signer = provider.getSigner();
-          const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-          
-    // calling getAllWaves method from smart contract
-    const waves = await wavePortalContract.getAllWaves();
-  
-    // collecting address, timestamp and message for the UI
-    let wavesCleaned = [];
-    waves.forEach(wave => {
-      wavesCleaned.push({
-          address: wave.waver,
-          timestamp: new Date(wave.timestamp * 1000),
-          message: wave.message,
-        });
-      });
+      const { ethereum }  = window;
+      if (ethereum){
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+        
+  // calling getAllWaves method from smart contract
+  const waves = await wavePortalContract.getAllWaves();
 
-    // storing data in React state 
-    setAllWaves(wavesCleaned);
-  } else {
-    console.log("Ethereum object does not exist");
-  }
+  // collecting address, timestamp and message for the UI
+  let wavesCleaned = [];
+  waves.forEach(wave => {
+    wavesCleaned.push({
+        address: wave.waver,
+        timestamp: new Date(wave.timestamp * 1000),
+        message: wave.message,
+      });
+    });
+
+  // storing data in React state 
+  setAllWaves(wavesCleaned);
+} else {
+  console.log("Ethereum object does not exist");
 }
+}
+
 
   useEffect(() => {
         // runs function when page loads
