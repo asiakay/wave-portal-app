@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
+import React, { useEffect, useState } from "react";
 import abi from "./utils/WavePortal.json";
 import { ButtonGroup, /* ListGroup */ } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,21 +7,17 @@ import "./App.css";
 import Navigation from "./Navigation";
 
 const App = () => {
+  /* state property that stores all waves to block */
+  const [allWaves, setAllWaves] = useState([]); 
+
   const [currentAccount, setCurrentAccount] = useState("");
   // variable that grabs and sets/updates the state of account that is adding the wave being sent to the blockchain
-  const [allWaves, setAllWaves] = useState([]); 
-    /* state property that stores all waves to block */
-  const contractAddress = "0x6AC870061D4433126Bac8F852d3214262692C776";
-    // variable that holds the smart contract address
-
   const [messageText, setMessageText] = useState("");
   // variable that grabs and sets/updates the state of the current message that gets sent to the smart contract
   
   const [loading, setLoading] = useState(false);
   // variable that grabs and sets/updates the state of the loading animation that displays on the page letting the user know minting is in progress
   
-
-
   const handleSubmit = (e) => {
     // variable that triggers:  
     e.preventDefault();
@@ -32,87 +28,58 @@ const App = () => {
   }
 
 
+
+  const contractAddress = "0x16061e5Eda9307b271C490E00E63bE043189d8B5";
+  // variable that holds the smart contract address
+
   const contractABI = abi.abi; 
   // imports application binary data from my-wave-portal>artifacts>contracts>WavePortal.json 
   // (cont from above) into wave-portal-app>src>utils>WavePortal.json
   
-
   const checkIfWalletIsConnected = async () => {
-    // variable that holds the async function that triggers the process checking
-    // (cont) checking if the wallet is connected  
-  
-   
-    const { ethereum } = window;
-    /* making sure we have access to window.ethereum */
-  
-        if (!ethereum) {
-          console.log("MetaMask is not connected")
-          // then output to the JavaScript console the above message in "".  
-          return;
-        } else {
-          console.log("We have the ethereum object", ethereum)
-       /* Checking if we're authorized to access the user's wallet */
-        }
-        ethereum.request({ method: 'eth_accounts' })
-        .then(accounts => {
-         console.log(accounts)
-       if(accounts.length !==0){
-         const account = accounts[0];
-         console.log("Found an authorized account:", account)
-         setCurrentAccount(account);
-       } else {
-         console.log("No authorized account found")
-       }
-      })
+  // variable that holds the async function that triggers the process checking
+  // (cont) checking if the wallet is connected  
+
+ 
+  const { ethereum } = window;
+  /* making sure we have access to window.ethereum */
+
+      if (!ethereum) {
+        console.log("MetaMask is not connected")
+        // then output to the JavaScript console the above message in "".  
+        return;
+      } else {
+        console.log("We have the ethereum object", ethereum)
+     /* Checking if we're authorized to access the user's wallet */
+      }
+      ethereum.request({ method: 'eth_accounts' })
+      .then(accounts => {
+       console.log(accounts)
+     if(accounts.length !==0){
+       const account = accounts[0];
+       console.log("Found an authorized account:", account)
+       setCurrentAccount(account);
+     } else {
+       console.log("No authorized account found")
+     }
+    })
+  }
+
+  const connectWallet = async () => {
+  // implementing connectWallet method
+
+  const ethereum = window.ethereum;
+
+    if (!ethereum){
+      alert("Get MetaMask!");
+      return;
+    } else {
+      const accounts = await ethereum.request({ method: "eth_requestAccounts" })
+    /* eth_requestAccounts: asking Metamask to give access to the user's wallet */
+    setCurrentAccount(accounts[0])
+    console.log("Connected", accounts[0])
+      }
     }
-
-    const connectWallet = async () => {
-      // implementing connectWallet method
-    
-      const ethereum = window.ethereum;
-    
-        if (!ethereum){
-          alert("Get MetaMask!");
-          return;
-        } else {
-          const accounts = await ethereum.request({ method: "eth_requestAccounts" })
-        /* eth_requestAccounts: asking Metamask to give access to the user's wallet */
-        setCurrentAccount(accounts[0])
-        console.log("Connected", accounts[0])
-          }
-        }
-
-    // method to get all waves from the contract 
-    const getAllWaves = async () => {
-      
-      const { ethereum }  = window;
-      if (ethereum){
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-        
-  // calling getAllWaves method from smart contract
-  const waves = await wavePortalContract.getAllWaves();
-
-  // collecting address, timestamp and message for the UI
-  let wavesCleaned = waves.map(wave => {
-    return {
-      address: wave.waver,
-      timestamp: new Date(wave.timestamp * 1000),
-      message: wave.messageText,
-    };
-  });
-  
-  
-  // storing data in React state 
-  setAllWaves(wavesCleaned);
-} else {
-  console.log("Ethereum object does not exist");
-}
-}
-
-
-
 
   const wave = async () => {
     const { ethereum } = window;
@@ -126,13 +93,13 @@ const App = () => {
 
         let count = await wavePortalContract.getTotalWaves();
 
-        await wavePortalContract.wave("WavePortal");
+        await wavePortalContract.wave("WavePortal", { gasLimit: 30000 });
         
         /* calling the getTotalWaves() function */
         console.log("Retrieved total wave count...", count.toNumber());
 
     // executing wave transaction below
-    const waveTxn = await wavePortalContract.wave(messageText, { gasLimit: 300000 });
+    const waveTxn = await wavePortalContract.wave(messageText);
     console.log("Writing wave to the blockchain", waveTxn.hash);
 
     setLoading(true)
@@ -148,61 +115,48 @@ const App = () => {
 
     count = await wavePortalContract.getTotalWaves();
     console.log("Updated wave count...", count.toNumber());
-    
-    getAllWaves()
+
     setMessageText("")
+    getAllWaves()
     
       } else {
         console.log("Ethereum object doesn't exist");
       }
     }
 
+    // method to get all waves from the contract 
+    const getAllWaves = async () => {
+      
+        const { ethereum }  = window;
+        if (ethereum){
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+          
+    // calling getAllWaves method from smart contract
+    const waves = await wavePortalContract.getAllWaves();
+  
+    // collecting address, timestamp and message for the UI
+    let wavesCleaned = [];
+    waves.forEach(wave => {
+      wavesCleaned.push({
+          address: wave.waver,
+          timestamp: new Date(wave.timestamp * 1000),
+          message: wave.message,
+        });
+      });
 
-
-  useEffect(() => {
-    let wavePortalContract;
-
-    const onNewWave = (from, timestamp, message) => {
-      console.log("NewWave", from, timestamp, message);
-      setAllWaves((prevState) => [
-        ...prevState,
-        {
-          address: from,
-          timestamp: new Date(timestamp * 1000),
-          message: message,
-        },
-      ]);
-    };
-
-    if (window.ethereum){
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-
-      wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-      wavePortalContract.on("NewWave", onNewWave);
-    }
-
-    return () => {
-      if (wavePortalContract){
-        wavePortalContract.off("NewWave", onNewWave);
-      }
-    };
-  }, [contractABI]);
+    // storing data in React state 
+    setAllWaves(wavesCleaned);
+  } else {
+    console.log("Ethereum object does not exist");
+  }
+}
 
   useEffect(() => {
+        // runs function when page loads
     checkIfWalletIsConnected();
-}, []);
-
-
-  useEffect(() => {
-    // runs function when page loads
-    connectWallet();
-}, []);
-
-useState(() => {
-  // 
-  getAllWaves();
-}, []);
+  }, []);
 
 return (
   <>
@@ -216,7 +170,7 @@ return (
       </div> {/* .header */}
 
         <div className="bio">
-        <h2><span className="">Curated Links</span></h2>
+        <h2><span className="">Favorite Links</span></h2>
         
        <div id="curated-links"> 
         <ButtonGroup bsPrefix="" vertical aria-label="curated links" /* variant="flush" id="li" */>
@@ -312,4 +266,3 @@ export default App;
   
   // const checkIfWalletIsConnected = async () => {
     // verifying access to window.ethereum
-   
