@@ -29,7 +29,7 @@ const App = () => {
 
 
 
-  const contractAddress = "0x0C5b7CBC3491A83379E99b3243f8d907573e371B";
+  const contractAddress = "0x2cEA3A7269A7530EDE5F4a6093640Fb028DE8b19";
   // variable that holds the smart contract address
 
   const contractABI = abi.abi; 
@@ -93,7 +93,7 @@ const App = () => {
 
         let count = await wavePortalContract.getTotalWaves();
 
-        await wavePortalContract.wave("hello", { gasLimit: 30000 });
+        await wavePortalContract.wave("WavePortal", { gasLimit: 30000 });
         
         /* calling the getTotalWaves() function */
         console.log("Retrieved total wave count...", count.toNumber());
