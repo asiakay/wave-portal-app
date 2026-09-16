@@ -7,7 +7,7 @@ const Navigation = () => {
       <Navbar.Brand id="brand" href="#">Web3 WavePortal</Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end"><Navbar.Text id="navtext">
-     <NavLink href="https://asialakay.net" id="brand">asialakay.net</NavLink>
+     <NavLink href="https://asiagrady.com" id="brand">asiagrady.com</NavLink>
      <NavLink href="https://buildspace.so/" id="brand">buildSpace.so</NavLink>
       </Navbar.Text></Navbar.Collapse>
   </Navbar>
